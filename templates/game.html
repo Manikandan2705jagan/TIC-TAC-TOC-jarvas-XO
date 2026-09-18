@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play &middot; Tic-Tac-Toe AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar glass">
+      <div class="brand">
+        <span class="brand-dot x-dot"></span>
+        <span class="brand-name">Tic-Tac-Toe <span class="accent">JARVIS&nbsp;XO</span></span>
+      </div>
+      <div class="topbar-right">
+        <div class="user-chip">
+          {% if user.picture %}
+            <img class="avatar" src="{{ user.picture }}" alt="" referrerpolicy="no-referrer">
+          {% else %}
+            <span class="avatar avatar-fallback">{{ user.name[0]|upper }}</span>
+          {% endif %}
+          <span class="user-name">{{ user.name }}</span>
+        </div>
+        <button id="logout-btn" class="btn btn-ghost btn-sm" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="panel board-panel glass">
+        <div class="board-wrap">
+          <div class="board" id="board" role="grid" aria-label="Tic-Tac-Toe board">
+            <svg class="win-line" id="win-line" viewBox="0 0 100 100" aria-hidden="true">
+              <defs>
+                <filter id="glow"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <line id="win-line-1" x1="5"  y1="16.7" x2="95" y2="16.7" filter="url(#glow)"/>
+              <line id="win-line-2" x1="5"  y1="50"   x2="95" y2="50"   filter="url(#glow)"/>
+              <line id="win-line-3" x1="5"  y1="83.3" x2="95" y2="83.3" filter="url(#glow)"/>
+              <line id="win-line-4" x1="16.7" y1="5"  x2="16.7" y2="95" filter="url(#glow)"/>
+              <line id="win-line-5" x1="50"  y1="5"  x2="50"   y2="95" filter="url(#glow)"/>
+              <line id="win-line-6" x1="83.3" y1="5" x2="83.3" y2="95" filter="url(#glow)"/>
+              <line id="win-line-7" x1="5"  y1="5"  x2="95" y2="95" filter="url(#glow)"/>
+              <line id="win-line-8" x1="95" y1="5"  x2="5"  y2="95" filter="url(#glow)"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="status-row">
+          <p class="status" id="status">Your turn</p>
+          <span class="thinking-dots" id="thinking-dots" hidden><span></span><span></span><span></span></span>
+        </div>
+
+        <div class="scoreboard">
+          <div class="score stat-you"><span class="score-label">YOU</span><span class="score-num" id="score-you">0</span></div>
+          <div class="score stat-draw"><span class="score-label">DRAWS</span><span class="score-num" id="score-draw">0</span></div>
+          <div class="score stat-ai"><span class="score-label">JARVIS XO</span><span class="score-num" id="score-ai">0</span></div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-primary" id="new-game-btn" type="button">New Game</button>
+          <div class="turn-picker" role="radiogroup" aria-label="Who moves first">
+            <button class="turn-btn" data-first="human" type="button">You first</button>
+            <button class="turn-btn active" data-first="ai" type="button">AI first</button>
+          </div>
+        </div>
+
+        <details class="stats-details glass">
+          <summary>How JARVIS XO thinks (search stats)</summary>
+          <div class="stats-body">
+            <p class="stats-blurb">
+              Every <strong>JARVIS XO</strong> move runs two searches on the
+              current position: classic <strong>Minimax</strong> and
+              <strong>Minimax with Alpha-Beta Pruning</strong>. Both find the
+              optimal move &mdash; pruning just skips provably-bad branches,
+              exploring far fewer nodes.
+            </p>
+            <div class="stats-grid">
+              <div class="stat-box"><span class="stat-box-label">Minimax nodes</span><span class="stat-box-num" id="stat-plain">-</span></div>
+              <div class="stat-box"><span class="stat-box-label">Alpha-Beta nodes</span><span class="stat-box-num" id="stat-pruned">-</span></div>
+              <div class="stat-box"><span class="stat-box-label">Nodes pruned</span><span class="stat-box-num" id="stat-saved">-</span></div>
+              <div class="stat-box"><span class="stat-box-label">JARVIS XO move</span><span class="stat-box-num" id="stat-move">-</span></div>
+            </div>
+            <p class="stats-note" id="stats-note">Play a move to see JARVIS XO's search stats.</p>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <footer class="footer">JARVIS XO &middot; classic Minimax with Alpha-Beta Pruning</footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

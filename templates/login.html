@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play &middot; Tic-Tac-Toe AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-page scanlines">
+  <div class="card auth-card">
+    <div class="logo-grid" aria-hidden="true">
+      <span class="logo-cell x-mark-mini"></span>
+      <span class="logo-cell o-mark-mini"></span>
+      <span class="logo-cell x-mark-mini"></span>
+      <span class="logo-cell o-mark-mini"></span>
+      <span class="logo-cell center-mark">JX</span>
+      <span class="logo-cell x-mark-mini"></span>
+      <span class="logo-cell o-mark-mini"></span>
+      <span class="logo-cell x-mark-mini"></span>
+      <span class="logo-cell o-mark-mini"></span>
+    </div>
+    <h1>Tic-Tac-Toe <span class="accent">JARVIS&nbsp;XO</span></h1>
+    <p class="subtitle">Minimax &middot; Alpha-Beta Pruning<br>Can you beat <span class="accent">JARVIS XO</span>?</p>
+
+    <button id="guest-btn" class="btn btn-primary" type="button">Play Now</button>
+    <p class="footnote">Play as a guest &mdash; no account needed. JARVIS&nbsp;XO awaits.</p>
+  </div>
+
+  <script>
+    document.getElementById('guest-btn').addEventListener('click', () => {
+      fetch('/guest', {method: 'POST'})
+        .then(r => r.ok ? (window.location = '/') : Promise.reject(r))
+        .catch(() => alert('Could not start a session.'));
+    });
+  </script>
+</body>
+</html>
